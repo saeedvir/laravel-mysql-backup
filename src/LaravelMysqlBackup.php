@@ -52,16 +52,16 @@ class LaravelMysqlBackupCommand extends Command {
 
             $this->printMessages(
                 [
-                    "php artisan mysql:backup \t 'This command ...'",
-                    "php artisan mysql:backup table1,table2,table3,.... \t 'This command ...'",
+                    "php artisan mysql:backup \t 'create backup file from all tables ...'",
+                    "php artisan mysql:backup table1,table2,table3,.... \t 'create backup from selected tables ...'",
                     "php artisan mysql:backup help \t 'see help'"
-                ]
+                ],true
             );
 
         }
     }
 
-    protected function backupDatabase($tables){
+    public function backupDatabase($tables){
         $start_backup_time =  microtime(true);
 
         $db_name = env('DB_DATABASE');
@@ -75,7 +75,7 @@ class LaravelMysqlBackupCommand extends Command {
         if(!$tables){
             $tables = $this->getTables($db_name);
         }
-        
+       
 
         #print in file
         file_put_contents(
@@ -84,20 +84,21 @@ class LaravelMysqlBackupCommand extends Command {
 
             $this->printMessages(
                 [
-                    "-- Backup With Laravel Mysql Backup --",
+                    "-- Backup With Laravel Mysql Backup / $date_time --",
                     "-- https://github.com/saeedvir/laravel-mysql-backup --",
                     "/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;",
                     "/*!40101 SET NAMES utf8 */;",
                     "/*!50503 SET NAMES utf8mb4 */;",
                     "/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;",
-                    "/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;"
+                    "/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;",
+                    "USE `$db_name`;"
                 ],
                 true
             )
         );
 
         #export Table Data
-        $this->exportTable($tables);
+        $this->exportTable($db_export_file,$db_name,$tables);
 
         #print in file
         file_put_contents(
@@ -116,7 +117,8 @@ class LaravelMysqlBackupCommand extends Command {
         $this->printMessages(
             [
                 'backup done.',
-                microtime(true) - $start_backup_time
+                $db_export_file,
+                // microtime(true) - $start_backup_time
             ]
         );
     }
@@ -137,9 +139,7 @@ class LaravelMysqlBackupCommand extends Command {
 
     }
 
-    protected function exportTable($tables=[]){
-
-        global $db_export_file;
+    protected function exportTable($db_export_file,$db_name,$tables=[]){
 
         foreach ($tables as $table) {
 
@@ -149,7 +149,7 @@ class LaravelMysqlBackupCommand extends Command {
             file_put_contents(
                 $db_export_file,
                 $this->printMessages(
-                    replaceCreateQuery($db_data['Create Table']).';',true
+                    $this->replaceCreateQuery($db_data['Create Table']).';',true
                 ),
                  FILE_APPEND
             );
@@ -162,7 +162,7 @@ class LaravelMysqlBackupCommand extends Command {
                     [
                         "DELETE FROM `$table`;",
                         "/*!40000 ALTER TABLE `$table` DISABLE KEYS */;"."\r\n"
-                    ]
+                    ],true
                     ), 
                     FILE_APPEND
                 
@@ -177,7 +177,7 @@ class LaravelMysqlBackupCommand extends Command {
             if(count($db_data)>0){
                 $tbl_cols = array_keys($db_data);
 
-                $column_str="INSERT IGNORE INTO `'.$table.'`  (";
+                $column_str="INSERT IGNORE INTO `$table`  (";
                 foreach ($tbl_cols as $col_name) {
                     $column_str .='`'.$col_name.'`,';
                 }
@@ -267,10 +267,8 @@ class LaravelMysqlBackupCommand extends Command {
         $ret_data = null ;
         if (is_array($messages)) {
            
-            $ret_data = "\r\n";
-
             if(!$ret){
-                echo $ret_data;
+                echo "\r\n";
             }
             
             foreach ($messages as $message) {
@@ -282,9 +280,9 @@ class LaravelMysqlBackupCommand extends Command {
                 
             }
         } else {
-            $ret_data="\r\n" . $messages . "\r\n";
+            $ret_data=$messages . "\r\n";
             if(!$ret){
-                echo $ret_data;
+                echo "\r\n" . $messages . "\r\n";
             }
            
         }
