@@ -35,6 +35,11 @@ For Help :
 php artisan mysql:backup help
 ```
 
+## Other Packages
+
+- [Laravel Project Ghost](https://github.com/saeedvir/projectGhost)
+- [Laravel Assets Optimize](https://github.com/saeedvir/laravel-assets-optimizer)
+
 ## Security
 
 If you discover any security related issues, please email [saeed.es91@gmail.com](mailto:saeed.es91@gmail.com) instead of using the issue tracker.
