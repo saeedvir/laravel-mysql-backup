@@ -1,0 +1,33 @@
+{
+    "name": "saeedvir/laravel-mysql-backup",
+    "description": "Export Mysql Database To The Single File (.sql)",
+    "keywords": [
+        "mysql",
+        "laravel mysql",
+        "mysql backup",
+        "laravel"
+      ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Saeed",
+            "email": "saeed.es91@gmail.com"
+        }
+    ],
+    "homepage": "https://github.com/saeedvir/laravel-mysql-backup",
+    "require": {
+        "php": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaravelMysqlBackup\\": "src/"
+        }
+    },
+      "extra": {
+        "laravel": {
+            "providers": [
+                "LaravelMysqlBackup\\LaravelMysqlBackupServiceProvider"
+            ]
+        }
+    }
+}
