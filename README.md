@@ -38,6 +38,28 @@ For Help :
 php artisan mysql:backup help
 ```
 
+## How to execute artisan commands from route or controller in Laravel ?
+
+```php
+Route::get('MysqlBackupCommands/{command}', function ($command) {
+
+	/*
+		For Example :
+		
+		http://127.0.0.1/MysqlBackupCommands/backup 
+    
+	*/
+
+	$command = explode(' ',$command);
+	if(!isset($command[1])){
+		$command[1] = null;
+	}
+  
+    \Artisan::call('mysql:backup',['mode'=>$command[0],'options'=>$command[1]]); 
+
+});
+```
+
 ## Other Packages
 
 - [Laravel Project Ghost](https://github.com/saeedvir/projectGhost)
