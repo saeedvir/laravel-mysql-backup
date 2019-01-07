@@ -122,7 +122,7 @@ class LaravelMysqlBackupCommand extends Command
         );
     }
 
-    protected function _getTables($db_name)
+    protected function getTables($db_name)
     {
         $db_data = \DB::select(\DB::raw("SHOW TABLE STATUS FROM `$db_name`;"));
         $db_data = json_decode(json_encode($db_data), true);
