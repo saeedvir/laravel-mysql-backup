@@ -143,7 +143,6 @@ class LaravelMysqlBackupCommand extends Command
     {
 
         foreach ($tables as $table) {
-
             //Show Create Table
             $db_data = \DB::select(\DB::raw("SHOW CREATE TABLE `$db_name`.`$table`;"));
             $db_data = json_decode(json_encode($db_data[0]), true);
