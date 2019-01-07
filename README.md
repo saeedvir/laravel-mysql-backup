@@ -1,7 +1,4 @@
 # laravel-mysql-backup
-laravel mysql backup
-
-# laravel-mysql-backup
 This package will help you to backup mysql database in laravel (easy way !)
 
 Here are a few short examples of what you can do:
