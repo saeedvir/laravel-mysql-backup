@@ -1,4 +1,4 @@
-# laravel-mysql-backup
+# laravel mysql backup
 This package will help you to backup mysql database in laravel (easy way !)
 
 Here are a few short examples of what you can do:
@@ -6,6 +6,9 @@ Here are a few short examples of what you can do:
 
 ## توضیحات فارسی
 
+این پکیج برای پشتیبان گیری از دیتابیس مای اسکیوال کاربرد دارد.
+
+می توانید از دستورات زمان بندی در کنار آن استفاده کنید و به صورت زمان بندی پشتیبان گیری کنید.
 
 </div>
 
