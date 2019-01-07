@@ -56,7 +56,7 @@ class LaravelMysqlBackupCommand extends Command
                     "php artisan mysql:backup \t 'create backup file from all tables ...'",
                     "php artisan mysql:backup table1,table2,table3,.... \t 'create backup from selected tables ...'",
                     "php artisan mysql:backup help \t 'see help'",
-                ], true
+                ], false
             );
 
         }
