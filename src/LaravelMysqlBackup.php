@@ -122,7 +122,7 @@ class LaravelMysqlBackupCommand extends Command {
     }
 
     protected function getTables($db_name){
-        $db_data = \DB::select(DB::raw("SHOW TABLE STATUS FROM `$db_name`;"));
+        $db_data = \DB::select(\DB::raw("SHOW TABLE STATUS FROM `$db_name`;"));
         $db_data = json_decode(json_encode($db_data), true);
 
         $tables = [];
@@ -144,7 +144,7 @@ class LaravelMysqlBackupCommand extends Command {
         foreach ($tables as $table) {
 
             //Show Create Table
-            $db_data = \DB::select(DB::raw("SHOW CREATE TABLE `$db_name`.`$table`;"));
+            $db_data = \DB::select(\DB::raw("SHOW CREATE TABLE `$db_name`.`$table`;"));
             $db_data = json_decode(json_encode($db_data[0]), true);
             file_put_contents(
                 $db_export_file,
@@ -169,7 +169,7 @@ class LaravelMysqlBackupCommand extends Command {
             );
 
             //get Data From Table
-            $db_data = DB::table($table)->first();
+            $db_data = \DB::table($table)->first();
             
             $db_data = json_decode(json_encode($db_data), true);
 
@@ -193,7 +193,7 @@ class LaravelMysqlBackupCommand extends Command {
                 unset($db_data,$column_str);
 
 
-                $db_data = \DB::select(DB::raw("SELECT * FROM `$db_name`.`$table`;"));
+                $db_data = \DB::select(\DB::raw("SELECT * FROM `$db_name`.`$table`;"));
                 $db_data = json_decode(json_encode($db_data), true);
 
                 $interval_row=0;
