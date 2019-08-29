@@ -56,9 +56,9 @@ class LaravelMysqlBackupCommand extends Command
                     "php artisan mysql:backup \t 'create backup file from all tables ...'",
                     "php artisan mysql:backup table1,table2,table3,.... \t 'create backup from selected tables ...'",
                     "php artisan mysql:backup help \t 'see help'",
-                ], false
+                ],
+                false
             );
-
         }
     }
 
@@ -108,8 +108,9 @@ class LaravelMysqlBackupCommand extends Command
                     "/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;",
                     "/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;",
                     "/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;",
-                ]
-                , true),
+                ],
+                true
+            ),
             FILE_APPEND
         );
 
@@ -136,7 +137,6 @@ class LaravelMysqlBackupCommand extends Command
         unset($db_data);
 
         return $tables;
-
     }
 
     protected function exportTable($db_export_file, $db_name, $tables = [])
@@ -149,7 +149,8 @@ class LaravelMysqlBackupCommand extends Command
             file_put_contents(
                 $db_export_file,
                 $this->printMessages(
-                    $this->replaceCreateQuery($db_data['Create Table']) . ';', true
+                    $this->replaceCreateQuery($db_data['Create Table']) . ';',
+                    true
                 ),
                 FILE_APPEND
             );
@@ -162,7 +163,8 @@ class LaravelMysqlBackupCommand extends Command
                     [
                         "DELETE FROM `$table`;",
                         "/*!40000 ALTER TABLE `$table` DISABLE KEYS */;" . "\r\n",
-                    ], true
+                    ],
+                    true
                 ),
                 FILE_APPEND
 
@@ -174,7 +176,7 @@ class LaravelMysqlBackupCommand extends Command
             $db_data = json_decode(json_encode($db_data), true);
 
             $tbl_cols = [];
-            if (count($db_data) > 0) {
+            if ($db_data !== null && count($db_data) > 0) {
                 $tbl_cols = array_keys($db_data);
 
                 $column_str = "INSERT IGNORE INTO `$table`  (";
@@ -207,7 +209,6 @@ class LaravelMysqlBackupCommand extends Command
                         } else {
                             $row_insert .= $value . ',';
                         }
-
                     }
 
                     if ($interval_row + 1 == count($db_data)) {
@@ -218,7 +219,6 @@ class LaravelMysqlBackupCommand extends Command
                             $this->printMessages($row_insert, true),
                             FILE_APPEND
                         );
-
                     } else {
                         $row_insert = trim($row_insert, ',') . '),';
 
@@ -227,14 +227,11 @@ class LaravelMysqlBackupCommand extends Command
                             $this->printMessages($row_insert, true),
                             FILE_APPEND
                         );
-
                     }
 
                     $interval_row++;
-
                 }
                 unset($db_data, $interval_row, $row_insert);
-
             }
             file_put_contents(
                 $db_export_file,
@@ -247,7 +244,6 @@ class LaravelMysqlBackupCommand extends Command
                 $this->printMessages('REPAIR TABLE `' . $table . '`;OPTIMIZE TABLE `' . $table . '`;', true),
                 FILE_APPEND
             );
-
         } //Foreach Tables
     }
 
@@ -275,14 +271,12 @@ class LaravelMysqlBackupCommand extends Command
                 if (!$ret) {
                     echo $message . "\r\n";
                 }
-
             }
         } else {
             $ret_data = $messages . "\r\n";
             if (!$ret) {
                 echo "\r\n" . $messages . "\r\n";
             }
-
         }
 
         return ($ret == true) ? $ret_data : null;
